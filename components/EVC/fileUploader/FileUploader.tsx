@@ -27,32 +27,16 @@ const FileUploader = ({
   projectNames,
   setNewEVCreate,
 }: IFileUploader) => {
-  const api = axios.create({
-    baseURL: config.SERVER_URL,
-  });
-
-  // Add a request interceptor
-  api.interceptors.request.use(
-    (config) => {
-      // Add headers or authentication tokens to the request config
-      return config;
-    },
-    (error) => {
-      // Handle request errors
-      return Promise.reject(error);
-    }
-  );
-
   const downloadExcel = (e: any) => {
-    const xlsx = require('xlsx');
     const id = toast.loading('Preparing to download.', {
       position: 'bottom-right',
-      autoClose: 2000, // Set a duration in milliseconds (e.g., 2000 for 2 seconds)
+      autoClose: 500,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: false,
-      draggable: true,
-      progress: undefined,
+
+      theme: 'light',
+      type: 'info',
     });
     let data: string = projectNames[e];
     // axios
@@ -68,26 +52,23 @@ const FileUploader = ({
     //       autoClose: 300,
     //     });
     //   })
-    api
-      .get(`${config.SERVER_URL}xlData/${data}`, {
-        responseType: 'json',
-      })
+    axios
+      .get(`${config.SERVER_URL}xlData/${data}`, { responseType: 'blob' })
       .then((response) => {
-        console.log(response);
-        // const blob = new Blob([response.data], {
-        //   type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        // });
-        // const url = URL.createObjectURL(blob);
-        // const link = document.createElement('a');
-        // link.href = url;
-        // link.setAttribute('download', `${data}.xlsx`);
-        // document.body.appendChild(link);
-        // link.click();
-        // document.body.removeChild(link);
-        // URL.revokeObjectURL(url);
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `${data}.xlsx`);
+        document.body.appendChild(link);
+        link.click();
       })
-      .catch((error) => {
-        console.error(error);
+      .catch((error: any) => {
+        toast.update(id, {
+          render: `${error.message}.`,
+          type: 'error',
+          isLoading: false,
+          autoClose: 800,
+        });
       });
   };
 
