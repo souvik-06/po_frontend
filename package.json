@@ -42,8 +42,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.21.4",
-    "@commitlint/cli": "^17.6.1",
-    "@commitlint/config-conventional": "^17.6.1",
     "@popperjs/core": "^2.11.7",
     "@types/estree": "^1.0.0",
     "@types/node": "18.16.1",
