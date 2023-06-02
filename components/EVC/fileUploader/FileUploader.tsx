@@ -53,9 +53,10 @@ const FileUploader = ({
     //     });
     //   })
     axios
-      .get(`${config.SERVER_URL}xlData/${data}`, { responseType: 'blob' })
+      .get(`${config.SERVER_URL}xlData/${data}`)
       .then((response) => {
-        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const url = response.data;
+        console.log(response);
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download', `${data}.xlsx`);
