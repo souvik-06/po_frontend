@@ -56,7 +56,7 @@ const FileUploader = ({
       .get(`${config.SERVER_URL}xlData/${data}`)
       .then((response) => {
         const url = response.data;
-        console.log(response);
+        console.log(response.data);
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download', `${data}.xlsx`);
