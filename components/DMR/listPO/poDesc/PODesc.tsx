@@ -13,44 +13,35 @@ const PODesc = ({ searchDetails }: { searchDetails: sortedData }) => {
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     console.log('DMR DESC', data);
     e.preventDefault();
-    const id = toast.loading('Submiting...', {
-      position: 'bottom-right',
-      autoClose: 500,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: false,
-      draggable: true,
-      progress: undefined,
-      theme: 'light',
+
+    data.details.map((a) => {
+      console.log(a);
+      if (a.po_description?.length === 0) {
+        toast.error('Please fill Product Description.');
+      } else if (a.amount?.length === 0) {
+        toast.error('Please fill Amount.');
+      } else if (a.raisedAmount?.length === 0) {
+        toast.error('Please fill Raised Amount.');
+      } else if (a.dmrNo?.length == 0) {
+        toast.error('Please fill DMR No.');
+      } else if (a.date?.length === 0) {
+        toast.error('Please fill Date.');
+      } else {
+        axios
+          .patch(`${config.SERVER_URL}poDetails/${data.ponumber}`, data.details)
+          .then((res) => {
+            if (res.status === 404) {
+              toast.error('404, File Not Found.');
+            } else if (res.status === 200) {
+              toast.success('Data updated successfully.');
+            }
+          })
+          .catch((err) => {
+            toast.error(`Data Not Updated. Error: ${err.message}.`);
+            // console.log(err);
+          });
+      }
     });
-    axios
-      .patch(`${config.SERVER_URL}poDetails/${data.ponumber}`, data.details)
-      .then((res) => {
-        if (res.status === 404) {
-          toast.update(id, {
-            render: '404, File Not Found.',
-            type: 'error',
-            isLoading: false,
-            autoClose: 300,
-          });
-        } else if (res.status === 200) {
-          toast.update(id, {
-            render: 'Data updated successfully.',
-            type: 'success',
-            isLoading: false,
-            autoClose: 300,
-          });
-        }
-      })
-      .catch((err) => {
-        toast.update(id, {
-          render: `Data Not Updated. Error: ${err.message}.`,
-          type: 'error',
-          isLoading: false,
-          autoClose: 300,
-        });
-        // console.log(err);
-      });
   };
 
   return (
@@ -63,6 +54,7 @@ const PODesc = ({ searchDetails }: { searchDetails: sortedData }) => {
           <div className={`${styles.rowo} ${styles.header}`}>
             <div className={styles.cell}></div>
             <div className={styles.cell}>PO Number</div>
+            <div className={styles.cell}>PO Type</div>
             <div className={styles.cell}>PO Name</div>
             <div className={styles.cell}>Project Name</div>
             <div className={styles.cell}>Date</div>
@@ -72,6 +64,9 @@ const PODesc = ({ searchDetails }: { searchDetails: sortedData }) => {
             <div className={styles.cell}></div>
             <div className={styles.cell} data-title="PO Number">
               {data.ponumber}
+            </div>
+            <div className={styles.cell} data-title="PO Type">
+              {data.potype}
             </div>
             <div className={styles.cell} data-title="PO Name">
               {data.poname}
@@ -124,7 +119,7 @@ const PODesc = ({ searchDetails }: { searchDetails: sortedData }) => {
           </div>
         </div>
       </div>
-      {data.details?.map((elementInArray, index) => {
+      {data.details.map((elementInArray, index) => {
         return (
           <Row
             key={index}
@@ -151,16 +146,16 @@ const PODesc = ({ searchDetails }: { searchDetails: sortedData }) => {
                   type="text"
                   name="description"
                   id="description"
-                  value={elementInArray?.description}
+                  value={elementInArray.po_description}
                   onChange={(e) => {
-                    elementInArray.description = e.target.value;
+                    elementInArray.po_description = e.target.value;
                     setInputList({ ...inputList });
                   }}
                   required
                   aria-required
                 />
                 <label htmlFor="description" className="form__label">
-                  Product
+                  Product <span className="star">*</span>
                 </label>
               </Col>
               <Col className="form__group field">
@@ -178,7 +173,7 @@ const PODesc = ({ searchDetails }: { searchDetails: sortedData }) => {
                   aria-required
                 />
                 <label htmlFor="amount" className="form__label">
-                  Amount
+                  Amount<span className="star">*</span>
                 </label>
               </Col>
             </Row>
@@ -201,7 +196,7 @@ const PODesc = ({ searchDetails }: { searchDetails: sortedData }) => {
                   aria-required
                 />
                 <label htmlFor="raisedAmount" className="form__label">
-                  Raised Amount
+                  Raised Amount<span className="star">*</span>
                 </label>
               </Col>
               <Col className="form__group field">
@@ -219,7 +214,7 @@ const PODesc = ({ searchDetails }: { searchDetails: sortedData }) => {
                   aria-required
                 />
                 <label htmlFor="dmrNO" className="form__label">
-                  DMR No.
+                  DMR No.<span className="star">*</span>
                 </label>
               </Col>
               <Col className="form__group field">
@@ -237,10 +232,12 @@ const PODesc = ({ searchDetails }: { searchDetails: sortedData }) => {
                   aria-required
                 />
                 <label htmlFor="amount" className="form__label">
-                  Date
+                  Date<span className="star">*</span>
                 </label>
               </Col>
             </Row>
+            <br></br>
+            <br></br>
           </Row>
         );
       })}

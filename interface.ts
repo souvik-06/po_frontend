@@ -4,20 +4,21 @@ import { WorkBook } from 'xlsx';
 //DMR
 export interface sortedData {
   ponumber: string;
+  potype: string;
   date: string;
-  details?: DetailsEntity[];
+  details: DetailsEntity[];
   poname: string;
   projectName: string;
   filename: string;
   id: number;
-  filePath?: string;
+  filePath: string;
 }
 export interface DetailsEntity {
-  description?: string;
-  amount?: string;
-  raisedAmount?: string;
-  dmrNo?: string;
-  date?: string;
+  po_description: string;
+  amount: string;
+  raisedAmount: string;
+  dmrNo: string;
+  date: string;
 }
 
 //EVC

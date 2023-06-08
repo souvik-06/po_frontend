@@ -9,6 +9,7 @@ import AddRows from '../RowAR/RowAR';
 
 interface IInputList {
   po_id: string;
+  po_type: string;
   poname: string;
   projectName: string;
   date: string;
@@ -16,6 +17,9 @@ interface IInputList {
     index: number;
     po_description: string;
     amount: string;
+    raisedAmount: string;
+    dmrNo: string;
+    date: string;
   }[];
   filename: string;
 }
@@ -29,10 +33,20 @@ const PoDetails = ({ file, handleReset, fileName }: props) => {
   //initial structre of input details
   const [inputList, setInputList] = useState<IInputList>({
     po_id: '',
+    po_type: '',
     poname: '',
     projectName: '',
     date: '',
-    items: [{ index: Math.random(), po_description: '', amount: '' }],
+    items: [
+      {
+        index: Math.random(),
+        po_description: '',
+        amount: '',
+        dmrNo: '',
+        raisedAmount: '',
+        date: '',
+      },
+    ],
     filename: fileName.replace(/\s+/g, '+'),
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -43,7 +57,14 @@ const PoDetails = ({ file, handleReset, fileName }: props) => {
       ...inputList,
       items: [
         ...inputList.items,
-        { index: Math.random(), po_description: '', amount: '' },
+        {
+          index: Math.random(),
+          po_description: '',
+          amount: '',
+          dmrNo: '',
+          raisedAmount: '',
+          date: '',
+        },
       ],
     });
   };
@@ -68,14 +89,21 @@ const PoDetails = ({ file, handleReset, fileName }: props) => {
       toast.error('Please fill PO Name.');
     } else if (inputList.projectName.length === 0) {
       toast.error('Please fill Project Name.');
+    } else if (inputList.items.every((a) => a.amount.length === 0)) {
+      toast.error('Please fill Amount.');
+    } else if (inputList.items.every((a) => a.po_description.length === 0)) {
+      toast.error('Please fill PO Description.');
+    } else if (inputList.po_type.length === 0) {
+      toast.error('Please fill Project Type.');
     } else {
       setIsLoading(true);
-      const { po_id, date, poname, projectName, items } = inputList;
+      const { po_id, po_type, date, poname, projectName, items } = inputList;
       const formData = new FormData();
       formData.append('file', file);
       console.log(file);
       const data = {
         po_id,
+        po_type,
         date,
         poname,
         projectName,
@@ -91,15 +119,17 @@ const PoDetails = ({ file, handleReset, fileName }: props) => {
         if (response.status === 200) {
           handleReset();
           setIsLoading(false);
-          console.log(response, 'POdetails')
+          console.log(response, 'POdetails');
           toast.success(`${response.data.msg} `);
           // await axios.post(`${config.SERVER_URL}uploadFile`, formData);
-        } if (response.status === 404) {
+        }
+        if (response.status === 404) {
           handleReset();
           setIsLoading(false);
           toast.success(`${response.data.msg} `);
           // await axios.post(`${config.SERVER_URL}uploadFile`, formData);
-        } if (response.status !== 404 && response.status !== 200) {
+        }
+        if (response.status !== 404 && response.status !== 200) {
           // handleReset();
           setIsLoading(false);
           toast.success(`${response.data.msg} `);
@@ -137,6 +167,29 @@ const PoDetails = ({ file, handleReset, fileName }: props) => {
                 PO Number <span className="star">*</span>
               </label>
             </Col>
+            <Col className={`${style.formGroup} ${style.field}`}>
+              <select
+                className={`${style['formField']} text-input`}
+                name="potype"
+                id="potype"
+                value={inputList.po_type}
+                required
+                aria-required
+                onChange={(e) =>
+                  setInputList({ ...inputList, po_type: e.target.value })
+                }
+              >
+                <option value="">Select Type</option>
+                <option value="Fixed">Fixed</option>
+                <option value="T&M">T&M</option>
+
+                {/* Add more options as needed */}
+              </select>
+              <label htmlFor="ponumber" className="form__label">
+                PO Type <span className="star">*</span>
+              </label>
+            </Col>
+
             <Col className={`${style.formGroup} ${style.field}`}>
               <input
                 className={`${style['formField']} text-input`}
