@@ -1,38 +1,69 @@
-import axios from 'axios';
-import { useEffect } from 'react';
-import config from '../../config.json';
+import { useState } from 'react';
+import { sortedData } from '../../interface';
 import styles from '../DMR/DMR.module.css';
+import useTable from '../DMR/listPO/useTable/useTable';
 
-const TotalDMR = () => {
-  useEffect(() => {
-    let isSubscribe: boolean = true;
-    const fetchAllPo = async () => {
-      try {
-        const response = await axios.get(`${config.SERVER_URL}getAllItems`);
+const TotalDMR = ({ poDetails }: { poDetails: sortedData[] }) => {
+  let data = poDetails;
 
-        console.log(response);
-      } catch (err: any) {}
-    };
-    if (isSubscribe) {
-      fetchAllPo();
-    }
-    return () => {
-      isSubscribe = false;
-    };
-  }, []);
-
+  const [page, setPage] = useState(1);
+  const { slice, range } = useTable(data, page, 10);
+  //console.log(data);
   return (
     <>
       <div className={styles.table}>
         <div className={`${styles.rowo} ${styles.header}`}>
-          <div className={`${styles.cell}`}>S.No.</div>
-          <div className={`${styles.cell}`}>PO Number</div>
+          <div className={`${styles.cell}`}>PO No</div>
           <div className={`${styles.cell}`}>PO Type</div>
           <div className={`${styles.cell}`}>PO Name</div>
           <div className={`${styles.cell}`}>Project Name</div>
-          <div className={`${styles.cell}`}>Date</div>
-          <div className={`${styles.cell}`}></div>
+          <div className={`${styles.cell}`}>Total Amount</div>
+          <div className={`${styles.cell}`}>Total Raised Amount</div>
         </div>
+
+        {slice?.map((pData: sortedData, index: number) => {
+          //console.log(pData);
+          return (
+            // onClick = {(e) => handlePODetails(`${pData.ponumber}`, e)}
+            <div className={styles.rowo} key={index}>
+              <div className={`${styles.cell}`} data-title="PO No">
+                {pData.ponumber}
+              </div>
+              <div className={`${styles.cell}`} data-title="PO Type">
+                {pData.potype}
+              </div>
+              <div className={`${styles.cell}`} data-title="PO Name">
+                {pData.poname}
+              </div>
+              <div className={`${styles.cell}`} data-title="Project Name">
+                {pData.projectName}
+              </div>
+              <div className={`${styles.cell}`} data-title="Total Amount">
+                {pData.totalAmount}
+              </div>
+              <div
+                className={`${styles.cell}`}
+                data-title="Total Raised Amount"
+              >
+                {pData.totalRaisedAmount}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className={styles.tableFooter}>
+        {range.map((el: number, i: number) => (
+          <button
+            key={i}
+            className={`${styles.footerBTN} ${
+              page === el ? styles.activeFooterBTN : styles.inactiveFooterBTN
+            }`}
+            onClick={() => setPage(el)}
+          >
+            {el}
+          </button>
+        ))}
       </div>
     </>
   );

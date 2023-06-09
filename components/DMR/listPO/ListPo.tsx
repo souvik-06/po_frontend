@@ -25,7 +25,7 @@ const ListPo = ({ poDetails }: { poDetails: sortedData[] }) => {
       .get(`${config.SERVER_URL}getdetails/${ponumber}`)
       .then((res) => {
         setListData(res?.data);
-        console.log(res?.data);
+        //console.log(res?.data);
       })
       .catch(() => {
         setError((prev) => ({ ...prev, error: true }));
@@ -65,7 +65,7 @@ const ListPo = ({ poDetails }: { poDetails: sortedData[] }) => {
                 </div>
 
                 {slice?.map((pData: sortedData, index: number) => {
-                  console.log(pData);
+                  //console.log(pData);
                   return (
                     // onClick = {(e) => handlePODetails(`${pData.ponumber}`, e)}
                     <div className={styles.rowo} key={index}>

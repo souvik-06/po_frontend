@@ -12,6 +12,8 @@ export interface sortedData {
   filename: string;
   id: number;
   filePath: string;
+  totalRaisedAmount?: number;
+  totalAmount?: number;
 }
 export interface DetailsEntity {
   po_description: string;

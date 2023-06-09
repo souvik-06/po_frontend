@@ -59,7 +59,7 @@ const Header = () => {
         <Link
           href="/total"
           className={`${styles.navbarlink}  ${
-            router.asPath === '/totalAmount' ? styles['active'] : ''
+            router.asPath === '/total' ? styles['active'] : ''
           }`}
           onClick={toggleMenu}
         >
