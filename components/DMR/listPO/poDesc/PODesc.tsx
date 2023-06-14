@@ -14,34 +14,47 @@ const PODesc = ({ searchDetails }: { searchDetails: sortedData }) => {
     console.log('DMR DESC', data);
     e.preventDefault();
 
+    let isValid = true;
+
     data.details.map((a) => {
       console.log(a);
       if (a.po_description?.length === 0) {
         toast.error('Please fill Product Description.');
+        isValid = false;
       } else if (a.amount?.length === 0) {
         toast.error('Please fill Amount.');
+        isValid = false;
       } else if (a.raisedAmount?.length === 0) {
         toast.error('Please fill Raised Amount.');
+        isValid = false;
       } else if (a.dmrNo?.length == 0) {
         toast.error('Please fill DMR No.');
+        isValid = false;
       } else if (a.date?.length === 0) {
         toast.error('Please fill Date.');
+        isValid = false;
+      } else if (a.raisedAmount > a.amount) {
+        toast.error('Raised Amount Cannot be more than the Amount');
+        isValid = false;
       } else {
-        axios
-          .patch(`${config.SERVER_URL}poDetails/${data.ponumber}`, data.details)
-          .then((res) => {
-            if (res.status === 404) {
-              toast.error('404, File Not Found.');
-            } else if (res.status === 200) {
-              toast.success('Data updated successfully.');
-            }
-          })
-          .catch((err) => {
-            toast.error(`Data Not Updated. Error: ${err.message}.`);
-            // console.log(err);
-          });
       }
     });
+
+    if (isValid) {
+      axios
+        .patch(`${config.SERVER_URL}poDetails/${data.ponumber}`, data.details)
+        .then((res) => {
+          if (res.status === 404) {
+            toast.error('404, File Not Found.');
+          } else if (res.status === 200) {
+            toast.success('Data updated successfully.');
+          }
+        })
+        .catch((err) => {
+          toast.error(`Data Not Updated. Error: ${err.message}.`);
+          // console.log(err);
+        });
+    }
   };
 
   return (
@@ -173,7 +186,8 @@ const PODesc = ({ searchDetails }: { searchDetails: sortedData }) => {
                   aria-required
                 />
                 <label htmlFor="amount" className="form__label">
-                  Amount<span className="star">*</span>
+                  Amount {`(${data.currency})`}
+                  <span className="star">*</span>
                 </label>
               </Col>
             </Row>
@@ -196,7 +210,8 @@ const PODesc = ({ searchDetails }: { searchDetails: sortedData }) => {
                   aria-required
                 />
                 <label htmlFor="raisedAmount" className="form__label">
-                  Raised Amount<span className="star">*</span>
+                  Raised Amount {`(${data.currency})`}
+                  <span className="star">*</span>
                 </label>
               </Col>
               <Col className="form__group field">

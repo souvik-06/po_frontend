@@ -13,6 +13,7 @@ interface IInputList {
   poname: string;
   projectName: string;
   date: string;
+  currency: string;
   items: {
     index: number;
     po_description: string;
@@ -37,6 +38,7 @@ const PoDetails = ({ file, handleReset, fileName }: props) => {
     poname: '',
     projectName: '',
     date: '',
+    currency: '',
     items: [
       {
         index: Math.random(),
@@ -92,12 +94,15 @@ const PoDetails = ({ file, handleReset, fileName }: props) => {
     } else if (inputList.items.every((a) => a.amount.length === 0)) {
       toast.error('Please fill Amount.');
     } else if (inputList.items.every((a) => a.po_description.length === 0)) {
-      toast.error('Please fill PO Description.');
+      toast.error('Please fill Product Name.');
     } else if (inputList.po_type.length === 0) {
       toast.error('Please fill Project Type.');
+    } else if (inputList.currency.length === 0) {
+      toast.error('Please Select Currency.');
     } else {
       setIsLoading(true);
-      const { po_id, po_type, date, poname, projectName, items } = inputList;
+      const { po_id, po_type, date, poname, projectName, currency, items } =
+        inputList;
       const formData = new FormData();
       formData.append('file', file);
       console.log(file);
@@ -107,6 +112,7 @@ const PoDetails = ({ file, handleReset, fileName }: props) => {
         date,
         poname,
         projectName,
+        currency,
         items,
         filename: file.name,
       };
@@ -208,6 +214,9 @@ const PoDetails = ({ file, handleReset, fileName }: props) => {
                 PO Name <span className="star">*</span>
               </label>
             </Col>
+          </Row>
+          <br></br>
+          <Row>
             <Col className={`${style.formGroup} ${style.field}`}>
               <input
                 className={`${style['formField']} text-input`}
@@ -242,6 +251,30 @@ const PoDetails = ({ file, handleReset, fileName }: props) => {
               />
               <label htmlFor="date" className="form__label">
                 Select date <span className="star">*</span>
+              </label>
+            </Col>
+            <Col className={`${style.formGroup} ${style.field}`}>
+              <select
+                className={`${style['formField']} currency-dropdown`}
+                name="currency"
+                id="currency"
+                aria-required
+                required
+                value={inputList.currency}
+                onChange={(e) =>
+                  setInputList({ ...inputList, currency: e.target.value })
+                }
+              >
+                <option value="" disabled selected>
+                  Select Currency
+                </option>
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="JPY">JPY</option>
+                <option value="INR">INR</option>
+              </select>
+              <label htmlFor="currency" className="form__label">
+                Select currency <span className="star">*</span>
               </label>
             </Col>
           </Row>

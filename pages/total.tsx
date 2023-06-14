@@ -6,7 +6,6 @@ import TotalDMR from '../components/TotalDMR/totalAmount';
 import PrimaryLayout from '../components/layouts/primary/PrimaryLayout';
 import config from '../config.json';
 import { sortedData } from '../interface';
-import styles from '../styles/dmr.module.css';
 import { NextPageWithLayout } from './page';
 
 const Total: NextPageWithLayout = () => {
@@ -28,16 +27,16 @@ const Total: NextPageWithLayout = () => {
           let totalRaisedAmount = 0;
           el.details.map((ed) => {
             if (!isNaN(Number(ed.amount))) {
-              totalAmount += Number(ed.amount);
+              totalAmount += parseFloat(ed.amount);
             }
             if (!isNaN(Number(ed.raisedAmount))) {
-              totalRaisedAmount += Number(ed.raisedAmount);
+              totalRaisedAmount += parseFloat(ed.raisedAmount);
             }
           });
           return {
             ...el,
-            totalAmount: totalAmount,
-            totalRaisedAmount: totalRaisedAmount,
+            totalAmount: totalAmount.toFixed(2),
+            totalRaisedAmount: totalRaisedAmount.toFixed(2),
           };
         });
 
@@ -112,68 +111,78 @@ const Total: NextPageWithLayout = () => {
 
   return (
     <Container>
-      <Dropdown className={`btn btn-outline-dark ${styles.dropdown}`}>
-        <Dropdown.Toggle className=" dropdown-toggle" variant="outline">
-          Filter By Year : {filterType}
-        </Dropdown.Toggle>
-
-        <Dropdown.Menu className="dropdown-menu dropdown-menu-light">
-          <Dropdown.Item
-            className="dropdown-item"
-            onClick={() => {
-              setFilterType('All');
-            }}
+      <br></br>
+      <span style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Dropdown>
+          <Dropdown.Toggle
+            className="dropdown-toggle p-3"
+            variant="outline-dark"
           >
-            All
-          </Dropdown.Item>
-          {years.map((year) => {
-            return (
-              <Dropdown.Item
-                className="dropdown-item"
-                onClick={() => {
-                  setFilterType(year);
-                }}
-              >
-                {year}
-              </Dropdown.Item>
-            );
-          })}
-        </Dropdown.Menu>
-      </Dropdown>
+            Filter By Year : {filterType}
+          </Dropdown.Toggle>
 
-      <Dropdown className={`btn btn-outline-dark ${styles.dropdown}`}>
-        <Dropdown.Toggle className=" dropdown-toggle" variant="outline">
-          Project Type : {projectType}
-        </Dropdown.Toggle>
+          <Dropdown.Menu className="dropdown-menu dropdown-menu-light">
+            <Dropdown.Item
+              className="dropdown-item"
+              onClick={() => {
+                setFilterType('All');
+              }}
+            >
+              All
+            </Dropdown.Item>
+            {years.map((year) => {
+              return (
+                <Dropdown.Item
+                  className="dropdown-item"
+                  onClick={() => {
+                    setFilterType(year);
+                  }}
+                >
+                  {year}
+                </Dropdown.Item>
+              );
+            })}
+          </Dropdown.Menu>
+        </Dropdown>
 
-        <Dropdown.Menu className="dropdown-menu dropdown-menu-light">
-          <Dropdown.Item
-            className="dropdown-item"
-            onClick={() => {
-              setProjectType('All');
-            }}
+        <Dropdown style={{ marginLeft: '10px' }}>
+          <Dropdown.Toggle
+            className=" dropdown-toggle p-3"
+            variant="outline-dark"
           >
-            All
-          </Dropdown.Item>
+            Project Type : {projectType}
+          </Dropdown.Toggle>
 
-          <Dropdown.Item
-            className="dropdown-item"
-            onClick={() => {
-              setProjectType('Fixed');
-            }}
-          >
-            Fixed
-          </Dropdown.Item>
-          <Dropdown.Item
-            className="dropdown-item"
-            onClick={() => {
-              setProjectType('T&M');
-            }}
-          >
-            T&M
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+          <Dropdown.Menu className="dropdown-menu dropdown-menu-light">
+            <Dropdown.Item
+              className="dropdown-item"
+              onClick={() => {
+                setProjectType('All');
+              }}
+            >
+              All
+            </Dropdown.Item>
+
+            <Dropdown.Item
+              className="dropdown-item"
+              onClick={() => {
+                setProjectType('Fixed');
+              }}
+            >
+              Fixed
+            </Dropdown.Item>
+            <Dropdown.Item
+              className="dropdown-item"
+              onClick={() => {
+                setProjectType('T&M');
+              }}
+            >
+              T&M
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+      </span>
+      <br></br>
 
       <TotalDMR poDetails={po}></TotalDMR>
     </Container>

@@ -9,11 +9,12 @@ export interface sortedData {
   details: DetailsEntity[];
   poname: string;
   projectName: string;
+  currency: string;
   filename: string;
   id: number;
   filePath: string;
-  totalRaisedAmount?: number;
-  totalAmount?: number;
+  totalRaisedAmount?: string;
+  totalAmount?: string;
 }
 export interface DetailsEntity {
   po_description: string;

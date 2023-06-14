@@ -94,7 +94,7 @@ const ListPo = ({ poDetails }: { poDetails: sortedData[] }) => {
                         className="btn btn-outline-dark"
                         onClick={() => handlePODetails(`${pData.ponumber}`)}
                       >
-                        View more.
+                        View more
                       </button>
                     </div>
                   );
