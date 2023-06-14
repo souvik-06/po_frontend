@@ -22,7 +22,7 @@ const TotalDMR = ({ poDetails }: { poDetails: sortedData[] }) => {
         </div>
 
         {slice?.map((pData: sortedData, index: number) => {
-          //console.log(pData);
+          //console.log();
           return (
             // onClick = {(e) => handlePODetails(`${pData.ponumber}`, e)}
             <div className={styles.rowo} key={index}>

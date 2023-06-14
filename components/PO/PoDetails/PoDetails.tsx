@@ -191,7 +191,7 @@ const PoDetails = ({ file, handleReset, fileName }: props) => {
 
                 {/* Add more options as needed */}
               </select>
-              <label htmlFor="ponumber" className="form__label">
+              <label htmlFor="poType" className="form__label">
                 PO Type <span className="star">*</span>
               </label>
             </Col>

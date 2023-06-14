@@ -1,6 +1,6 @@
 {
-  "LOCAL_URLK": "https://x0efrak10l.execute-api.ap-south-1.amazonaws.com/dev/",
-  "SERVER_URLK": "https://x0efrak10l.execute-api.ap-south-1.amazonaws.com/dev/",
-  "LOCAL_URL": "http://localhost:8001/",
-  "SERVER_URL": "http://localhost:8001/"
+  "LOCAL_URL": "https://x0efrak10l.execute-api.ap-south-1.amazonaws.com/dev/",
+  "SERVER_URL": "https://x0efrak10l.execute-api.ap-south-1.amazonaws.com/dev/",
+  "LOCAL_URLK": "http://localhost:8001/",
+  "SERVER_URLK": "http://localhost:8001/"
 }

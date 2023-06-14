@@ -314,7 +314,7 @@ const FileUploader = ({
               <div className={`${styles.cell}`}>Consumption</div>
             </div>
 
-            {evData.slice(1).map((row, index) => (
+            {evData.slice(1).map((row: any, index) => (
               <div className={styles.rowo} key={index}>
                 <div className={`${styles.cell}`} data-title="Year">
                   {row[0]}
@@ -329,7 +329,10 @@ const FileUploader = ({
                   {row[3]}
                 </div>
                 <div className={`${styles.cell}`} data-title="Consumption">
-                  {row[4]}
+                  {row[4].slice(0, 4)}
+                  {Number(row[4].slice(4).trim()).toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                  })}
                 </div>
               </div>
             ))}
